@@ -23,23 +23,29 @@ to”, y el Juego Pausado. Basta con dar click en cualquier punto de la
 pantalla, para generar una celula Viva. O bien, convertir una que ya lo
 este al estado ”Muerto”. Este proceso se puede realizar cuantas veces
 se quiera.
+
 -De igual manera, en este estado podemos presionar la tecla ”S”(de
 ”Save”) para guardar el estado actual del Juego a un archivo ”.txt”.
 La consola nos preguntara el nombre que queremos asignarle a este
 archivo, guardandolo en la misma carpeta donde se encuentra el archivo
 del Juego.
+
 -En este estado de Pausa, tambien podemos presionar la tecla ”L”(de
 Load) para cargar un Juego antes guardado. La consola nos preguntara
 el nombre del archivo ”.txt.a cargar, el cual se tiene que encontrar en
 la misma carpeta que el archivo del Juego. Hasta el momento, solo
 podemos cargar archivos que se hayan creado con el mismo tamaño
 de Pantalla y Celula, pues de otra manera se genera un error.
+
 -Una vez querramos que el juego inicie, presionamos la tecla ”P”(de
 ”Pausa”) para que el juego comience a evolucionar.
+
 -También podemos presionar la tecla "G" (de Gráfica), para generar en una ventana aparte,
 la gráfica de densidad poblacional a través de las generaciones.
+
 -En este estado podemos tambien presionar la tecla "H"(de Heat) para activar y desactivar
 la vista de "calor". Que nos muestra qué células han estado vivas más tiempo.
+
 -Por último, podemos presionar la tecla "C"(de Clear) para reiniciar el tablero, conteo de generación, gráfica poblacional y mapa de calor.
 
 # Estado de Evolucion
