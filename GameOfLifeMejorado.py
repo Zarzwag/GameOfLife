@@ -14,6 +14,20 @@ def crearArreglo(cols, rows):
         j=0
         i+=1
     return arreglo
+
+def toDecimal(binario):
+    binarioString=str(binario)
+    numero_decimal = 0 #aquí iremos sumando el resultado de cada multiplicación
+    for posicion, digito_string in enumerate(binarioString[::-1]):
+	       numero_decimal += int(digito_string) * 2 ** posicion
+    return numero_decimal
+
+def toBinario(decimal):
+    binario=bin(int(decimal))
+    binary=str(binario)
+    binary=binary[2:]
+    return binary
+
 def save(arreglo):
     name=input("Nombre del Archivo: ")
     f = open("output.txt",'w')
@@ -150,7 +164,6 @@ def reglas(arreglo, arregloCalor):
         j=0
         i+=1
     arreglo = arreglo2
-    pygame.time.delay(100)
     return arreglo
 
 def sumarVecinos(arreglo, x, y):
@@ -165,11 +178,145 @@ def sumarVecinos(arreglo, x, y):
         j=-1
         i+=1
     return arreglo
+
 def graficarGeneraciones(generacion, vivos):
     plt.plot(generacion, vivos)
     plt.xlabel("Generación")
     plt.ylabel("Células Vivas")
     plt.show()
+
+def atractorDos(arreglo):
+    medioArregloX=int(len(arreglo)/2)-1
+    medioArregloY=int(len(arreglo[medioArregloX])/2)-1
+    arregloAtractores=[]
+    cargando=0
+    for x in range(0, 16):
+        binario=toBinario(x)
+        if len(binario)<4:
+            binario="000"+binario
+            binario=binario[-4:]
+        if binario[0]=="1":
+            arreglo[medioArregloX][medioArregloY]=1
+        if binario[1]=="1":
+            arreglo[medioArregloX+1][medioArregloY]=1
+        if binario[2]=="1":
+            arreglo[medioArregloX][medioArregloY+1]=1
+        if binario[3]=="1":
+            arreglo[medioArregloX+1][medioArregloY+1]=1
+
+        arregloCalor=crearArreglo(cols, rows)
+        arregloEvoluciones=[]
+        for z in range(0, 251):
+            arreglo=reglas(arreglo, arregloCalor)
+            if arreglo[medioArregloX][medioArregloY]==1:
+                evolucion="1"
+            else:
+                evolucion="0"
+            if arreglo[medioArregloX+1][medioArregloY]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX][medioArregloY+1]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX+1][medioArregloY+1 ]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            arregloEvoluciones.append(toDecimal(evolucion))
+        cargando+=6.25
+        os.system("cls")
+        print(f'Cargando: {cargando}%...')
+        arregloAtractores.append(arregloEvoluciones)
+        arreglo=crearArreglo(cols, rows)
+        plt.plot(range(0,251), arregloAtractores[x])
+    plt.xlabel("Generación")
+    plt.ylabel("Estructuras")
+    plt.show()
+    arreglo=crearArreglo(cols, rows)
+
+def atractorTres(arreglo):
+    medioArregloX=int(len(arreglo)/2)-1
+    medioArregloY=int(len(arreglo[medioArregloX])/2)-1
+    arregloAtractores=[]
+    cargando=0
+    for x in range(0, 512):
+        binario=toBinario(x)
+        if len(binario)<9:
+            binario="00000000"+binario
+            binario=binario[-9:]
+        if binario[0]=="1":
+            arreglo[medioArregloX][medioArregloY]=1
+        if binario[1]=="1":
+            arreglo[medioArregloX+1][medioArregloY]=1
+        if binario[2]=="1":
+            arreglo[medioArregloX+2][medioArregloY]=1
+        if binario[3]=="1":
+            arreglo[medioArregloX][medioArregloY+1]=1
+        if binario[4]=="1":
+            arreglo[medioArregloX+1][medioArregloY+1]=1
+        if binario[5]=="1":
+            arreglo[medioArregloX+2][medioArregloY+1]=1
+        if binario[6]=="1":
+            arreglo[medioArregloX][medioArregloY+2]=1
+        if binario[7]=="1":
+            arreglo[medioArregloX+1][medioArregloY+2]=1
+        if binario[8]=="1":
+            arreglo[medioArregloX+2][medioArregloY+2]=1
+
+        arregloCalor=crearArreglo(cols, rows)
+        arregloEvoluciones=[]
+        for z in range(0, 251):
+            arreglo=reglas(arreglo, arregloCalor)
+            if arreglo[medioArregloX][medioArregloY]==1:
+                evolucion="1"
+            else:
+                evolucion="0"
+            if arreglo[medioArregloX+1][medioArregloY]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX+2][medioArregloY]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX][medioArregloY+1]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX+1][medioArregloY+1]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX+2][medioArregloY+1]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX][medioArregloY+2]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX+1][medioArregloY+2]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX+2][medioArregloY+2]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            arregloEvoluciones.append(toDecimal(evolucion))
+        cargando+=0.1953125
+        os.system("cls")
+        print(f'Cargando: {cargando}%...')
+        arregloAtractores.append(arregloEvoluciones)
+        arreglo=crearArreglo(cols, rows)
+        plt.plot(range(0,251), arregloAtractores[x])
+    plt.xlabel("Generación")
+    plt.ylabel("Estructuras")
+    plt.show()
+    arreglo=crearArreglo(cols, rows)
+
 def paused(arreglo, arregloGeneracion, arregloVivos, arregloCalor):
     pygame.display.set_caption('Game of Life: PAUSADO. P=Jugar, Click=Modificar Celulas, S=Guardar, L=Cargar')
     pause=True
@@ -196,6 +343,12 @@ def paused(arreglo, arregloGeneracion, arregloVivos, arregloCalor):
                 elif event.key == pygame.K_h:
                     screenCalor = pygame.display.set_mode(size)
                     pintarCalor(arregloCalor, screenCalor)
+                elif event.key == pygame.K_2:
+                    arreglo=crearArreglo(cols, rows)
+                    atractorDos(arreglo)
+                elif event.key == pygame.K_3:
+                    arreglo=crearArreglo(cols, rows)
+                    atractorTres(arreglo)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 if arreglo[int(pos[0]/resolution)][int(pos[1]/resolution)]==0:
@@ -224,6 +377,7 @@ def start(arreglo, arregloGeneracion, arregloVivos, arregloCalor):
         print("Celulas Vivas: "+str(arregloVivos[-1]))
 
         arreglo=reglas(arreglo, arregloCalor)
+        pygame.time.delay(100)
 
 
 i=0
