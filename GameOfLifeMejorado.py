@@ -1,6 +1,7 @@
 import os, pygame
 import matplotlib
 import matplotlib.pyplot as plt
+import networkx as nx
 
 def crearArreglo(cols, rows):
     arreglo=[]
@@ -139,6 +140,22 @@ def reglas(arreglo, arregloCalor):
     #0+6=6 MUERTO
     #0+7=7 MUERTO
     #0+8=8 MUERTO
+    if toroide=="M":
+        while i<cols:
+            while j<rows:
+                if i == 0:
+                    arreglo[i][j]=0
+                if i == cols-1:
+                    arreglo[i][j]=0
+                if j == 0:
+                    arreglo[i][j]=0
+                if j == rows-1:
+                    arreglo[i][j]=0
+                j+=1
+            j=0
+            i+=1
+        i=0
+        j=0
     while i<cols:
         while j<rows:
             state = arreglo[i][j]
@@ -188,8 +205,8 @@ def graficarGeneraciones(generacion, vivos):
 def atractorDos(arreglo):
     medioArregloX=int(len(arreglo)/2)-1
     medioArregloY=int(len(arreglo[medioArregloX])/2)-1
-    arregloAtractores=[]
     cargando=0
+    G=nx.DiGraph()
     for x in range(0, 16):
         binario=toBinario(x)
         if len(binario)<4:
@@ -203,10 +220,10 @@ def atractorDos(arreglo):
             arreglo[medioArregloX][medioArregloY+1]=1
         if binario[3]=="1":
             arreglo[medioArregloX+1][medioArregloY+1]=1
-
+        G.add_node(toDecimal(binario))
         arregloCalor=crearArreglo(cols, rows)
-        arregloEvoluciones=[]
-        for z in range(0, 251):
+        arregloEvoluciones=[toDecimal(binario)]
+        for z in range(1, 251):
             arreglo=reglas(arreglo, arregloCalor)
             if arreglo[medioArregloX][medioArregloY]==1:
                 evolucion="1"
@@ -225,22 +242,22 @@ def atractorDos(arreglo):
             else:
                 evolucion+="0"
             arregloEvoluciones.append(toDecimal(evolucion))
+            G.add_edge(arregloEvoluciones[-2], arregloEvoluciones[-1])
+
         cargando+=6.25
         os.system("cls")
         print(f'Cargando: {cargando}%...')
-        arregloAtractores.append(arregloEvoluciones)
         arreglo=crearArreglo(cols, rows)
-        plt.plot(range(0,251), arregloAtractores[x])
-    plt.xlabel("Generación")
-    plt.ylabel("Estructuras")
+    plt.subplot(111)
+    nx.draw_spring(G, arrows=True, with_labels=1, node_color='r')
     plt.show()
     arreglo=crearArreglo(cols, rows)
 
 def atractorTres(arreglo):
     medioArregloX=int(len(arreglo)/2)-1
     medioArregloY=int(len(arreglo[medioArregloX])/2)-1
-    arregloAtractores=[]
     cargando=0
+    G=nx.DiGraph()
     for x in range(0, 512):
         binario=toBinario(x)
         if len(binario)<9:
@@ -267,7 +284,10 @@ def atractorTres(arreglo):
 
         arregloCalor=crearArreglo(cols, rows)
         arregloEvoluciones=[]
-        for z in range(0, 251):
+        G.add_node(toDecimal(binario))
+        arregloCalor=crearArreglo(cols, rows)
+        arregloEvoluciones=[toDecimal(binario)]
+        for z in range(1, 251):
             arreglo=reglas(arreglo, arregloCalor)
             if arreglo[medioArregloX][medioArregloY]==1:
                 evolucion="1"
@@ -306,14 +326,13 @@ def atractorTres(arreglo):
             else:
                 evolucion+="0"
             arregloEvoluciones.append(toDecimal(evolucion))
+            G.add_edge(arregloEvoluciones[-2], arregloEvoluciones[-1])
         cargando+=0.1953125
         os.system("cls")
         print(f'Cargando: {cargando}%...')
-        arregloAtractores.append(arregloEvoluciones)
         arreglo=crearArreglo(cols, rows)
-        plt.plot(range(0,251), arregloAtractores[x])
-    plt.xlabel("Generación")
-    plt.ylabel("Estructuras")
+    plt.subplot(111)
+    nx.draw_spring(G, arrows=True, with_labels=1, node_size=200, node_color='r')
     plt.show()
     arreglo=crearArreglo(cols, rows)
 
@@ -369,14 +388,13 @@ def start(arreglo, arregloGeneracion, arregloVivos, arregloCalor):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
                     paused(arreglo, arregloGeneracion, arregloVivos, arregloCalor)
+        arreglo=reglas(arreglo, arregloCalor)
         arregloVivos.append(pintarPantalla(arreglo))
         arregloGeneracion.append(arregloGeneracion[-1]+1)
         os.system("clear")
         os.system("cls")
         print("Generacion: "+str(arregloGeneracion[-1]))
         print("Celulas Vivas: "+str(arregloVivos[-1]))
-
-        arreglo=reglas(arreglo, arregloCalor)
         pygame.time.delay(100)
 
 
@@ -405,7 +423,11 @@ while i<3:
 width=int(input("Teclea el ancho de la ventana en pixeles: "))
 height=int(input("Teclea el alto de la ventana en pixeles: "))
 resolution=int(input("Teclea la dimensión de la célula viva, en pixeles: "))
+toroide="X"
 
+while toroide!="T" and toroide!="M":
+    toroide=input("Quieres que las orillas sean tratadas como [T]oroide o [M]uertas: ")
+    toroide=toroide.upper()
 
 
 pygame.init()
