@@ -95,31 +95,7 @@ def pintarPantalla(arreglo):
     pygame.display.flip()
     return total
 
-def pintarCalor(arregloCalor, screenCalor):
-    i=0
-    j=0
-    total=0
-    multiplicador=255/arregloGeneracion[-1]
-    while i<cols:
-        while j<rows:
-            x=i*resolution
-            y=j*resolution
-            pygame.draw.rect(screenCalor, (255,int(255-(arregloCalor[i][j]*multiplicador)),int(255-(arregloCalor[i][j]*multiplicador))), (x,y, resolution, resolution))
-            j+=1
-        j=0
-        i+=1
-    pygame.display.flip()
-    calor=True
-    while calor==True:
-        for event in pygame.event.get():
-            #Si el evento es salir de la ventana, terminamos
-            if event.type == pygame.QUIT:
-                calor = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_h:
-                    calor=False
-
-def reglas(arreglo, arregloCalor):
+def reglas(arreglo):
     arreglo2=crearArreglo(cols,rows)
     i=0
     j=0
@@ -173,28 +149,22 @@ def reglas(arreglo, arregloCalor):
             if juego == "1":
                 if state == 3:
                     arreglo2[i][j]=1
-                    arregloCalor[i][j]+=1
                 elif state == 4 and arreglo[i][j] == 1:
                     arreglo2[i][j]=1
-                    arregloCalor[i][j]+=1
                 else:
                     arreglo2[i][j]=0
             elif juego == "2":
                 if state == 4 and arreglo[i][j] == 1:
                     arreglo2[i][j]=1
-                    arregloCalor[i][j]+=1
                 elif state == 2 and arreglo[i][j] == 0:
                     arreglo2[i][j]=1
-                    arregloCalor[i][j]+=1
                 else:
                     arreglo2[i][j]=0
             else:
                 if state == 8 and arreglo[i][j] == 1:
                     arreglo2[i][j]=1
-                    arregloCalor[i][j]+=1
                 elif state == 2 and arreglo[i][j] == 0:
                     arreglo2[i][j]=1
-                    arregloCalor[i][j]+=1
                 else:
                     arreglo2[i][j]=0
             j+=1
@@ -241,10 +211,9 @@ def atractorDos(arreglo):
         if binario[3]=="1":
             arreglo[medioArregloX+1][medioArregloY+1]=1
         G.add_node(toDecimal(binario))
-        arregloCalor=crearArreglo(cols, rows)
         arregloEvoluciones=[toDecimal(binario)]
         for z in range(1, 51):
-            arreglo=reglas(arreglo, arregloCalor)
+            arreglo=reglas(arreglo)
             if arreglo[medioArregloX][medioArregloY]==1:
                 evolucion="1"
             else:
@@ -303,13 +272,11 @@ def atractorTres(arreglo):
         if binario[8]=="1":
             arreglo[medioArregloX+2][medioArregloY+2]=1
 
-        arregloCalor=crearArreglo(cols, rows)
         arregloEvoluciones=[]
         G.add_node(toDecimal(binario))
-        arregloCalor=crearArreglo(cols, rows)
         arregloEvoluciones=[toDecimal(binario)]
         for z in range(1, 51):
-            arreglo=reglas(arreglo, arregloCalor)
+            arreglo=reglas(arreglo)
             if arreglo[medioArregloX][medioArregloY]==1:
                 evolucion="1"
             else:
@@ -358,7 +325,7 @@ def atractorTres(arreglo):
     plt.show()
     arreglo=crearArreglo(cols, rows)
 
-def paused(arreglo, arregloGeneracion, arregloVivos, arregloCalor):
+def paused(arreglo, arregloGeneracion, arregloVivos):
     pygame.display.set_caption('Game of Life: PAUSADO. P=Jugar, Click=Modificar Celulas, S=Guardar, L=Cargar')
     pause=True
     while pause==True:
@@ -369,7 +336,7 @@ def paused(arreglo, arregloGeneracion, arregloVivos, arregloCalor):
                 pygame.quit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
-                    start(arreglo, arregloGeneracion, arregloVivos, arregloCalor)
+                    start(arreglo, arregloGeneracion, arregloVivos)
                 elif event.key == pygame.K_s:
                     save(arreglo)
                 elif event.key == pygame.K_l:
@@ -378,12 +345,8 @@ def paused(arreglo, arregloGeneracion, arregloVivos, arregloCalor):
                     arregloGeneracion=[0]
                     arregloVivos=[0]
                     arreglo=crearArreglo(cols, rows)
-                    arregloCalor=crearArreglo(cols, rows)
                 elif event.key == pygame.K_g:
                     graficarGeneraciones(arregloGeneracion, arregloVivos)
-                elif event.key == pygame.K_h:
-                    screenCalor = pygame.display.set_mode(size)
-                    pintarCalor(arregloCalor, screenCalor)
                 elif event.key == pygame.K_2:
                     arreglo=crearArreglo(cols, rows)
                     atractorDos(arreglo)
@@ -398,7 +361,7 @@ def paused(arreglo, arregloGeneracion, arregloVivos, arregloCalor):
                     arreglo[int(pos[0]/resolution)][int(pos[1]/resolution)]=0
         pintarPantalla(arreglo)
 
-def start(arreglo, arregloGeneracion, arregloVivos, arregloCalor):
+def start(arreglo, arregloGeneracion, arregloVivos):
     pygame.display.set_caption('Game of Life: JUGANDO. P=Pausar')
     run=True
     while run == True:
@@ -409,8 +372,8 @@ def start(arreglo, arregloGeneracion, arregloVivos, arregloCalor):
                 pygame.quit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
-                    paused(arreglo, arregloGeneracion, arregloVivos, arregloCalor)
-        arreglo=reglas(arreglo, arregloCalor)
+                    paused(arreglo, arregloGeneracion, arregloVivos)
+        arreglo=reglas(arreglo)
         arregloVivos.append(pintarPantalla(arreglo))
         arregloGeneracion.append(arregloGeneracion[-1]+1)
         os.system("clear")
@@ -463,7 +426,6 @@ cols= width/resolution
 rows=height/resolution
 screen = pygame.display.set_mode(size)
 arreglo=crearArreglo(cols,rows)
-arregloCalor=crearArreglo(cols,rows)
 arregloGeneracion=[0]
 arregloVivos=[0]
-paused(arreglo, arregloGeneracion, arregloVivos, arregloCalor)
+paused(arreglo, arregloGeneracion, arregloVivos)
