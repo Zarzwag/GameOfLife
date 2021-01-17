@@ -123,23 +123,24 @@ def reglas(arreglo, arregloCalor):
     arreglo2=crearArreglo(cols,rows)
     i=0
     j=0
-    #1+0=1 MUERTO
-    #1+1=2 MUERTO
-    #1+2=3 VIVO
-    #1+3=4 VIVO
-    #1+4=5 MUERTO
-    #1+5=6 MUERTO
-    #1+6=7 MUERTO
-    #1+8=9 MUERTO
-    #0+0=0 MUERTO
-    #0+1=1 MUERTO
-    #0+2=2 MUERTO
-    #0+3=3 VIVO
-    #0+4=4 MUERTO
-    #0+5=5 MUERTO
-    #0+6=6 MUERTO
-    #0+7=7 MUERTO
-    #0+8=8 MUERTO
+    #1+0=1 muerto//muerto//muerto
+    #1+1=2 muerto//muerto//muerto
+    #1+2=3 VIVO//muerto//muerto
+    #1+3=4 VIVO//VIVO//muerto
+    #1+4=5 muerto//muerto//muerto
+    #1+5=6 muerto//muerto//muerto
+    #1+6=7 muerto//muerto//muerto
+    #1+7=8 muerto//muerto//VIVO
+    #1+8=9 muerto//muerto//muerto
+    #0+0=0 muerto//muerto//muerto
+    #0+1=1 muerto//muerto//muerto
+    #0+2=2 muerto//VIVO//VIVO
+    #0+3=3 VIVO//muerto//muerto
+    #0+4=4 muerto//muerto//muerto
+    #0+5=5 muerto//muerto//muerto
+    #0+6=6 muerto//muerto//muerto
+    #0+7=7 muerto//muerto//muerto
+    #0+8=8 muerto//muerto//muerto
     if toroide=="M":
         while i<cols:
             while j<rows:
@@ -169,14 +170,33 @@ def reglas(arreglo, arregloCalor):
     while i<cols:
         while j<rows:
             state=arreglo2[i][j]
-            if state == 3:
-                arreglo2[i][j]=1
-                arregloCalor[i][j]+=1
-            elif state == 4 and arreglo[i][j] == 1:
-                arreglo2[i][j]=1
-                arregloCalor[i][j]+=1
+            if juego == "1":
+                if state == 3:
+                    arreglo2[i][j]=1
+                    arregloCalor[i][j]+=1
+                elif state == 4 and arreglo[i][j] == 1:
+                    arreglo2[i][j]=1
+                    arregloCalor[i][j]+=1
+                else:
+                    arreglo2[i][j]=0
+            elif juego == "2":
+                if state == 4 and arreglo[i][j] == 1:
+                    arreglo2[i][j]=1
+                    arregloCalor[i][j]+=1
+                elif state == 2 and arreglo[i][j] == 0:
+                    arreglo2[i][j]=1
+                    arregloCalor[i][j]+=1
+                else:
+                    arreglo2[i][j]=0
             else:
-                arreglo2[i][j]=0
+                if state == 8 and arreglo[i][j] == 1:
+                    arreglo2[i][j]=1
+                    arregloCalor[i][j]+=1
+                elif state == 2 and arreglo[i][j] == 0:
+                    arreglo2[i][j]=1
+                    arregloCalor[i][j]+=1
+                else:
+                    arreglo2[i][j]=0
             j+=1
         j=0
         i+=1
@@ -223,7 +243,7 @@ def atractorDos(arreglo):
         G.add_node(toDecimal(binario))
         arregloCalor=crearArreglo(cols, rows)
         arregloEvoluciones=[toDecimal(binario)]
-        for z in range(1, 251):
+        for z in range(1, 51):
             arreglo=reglas(arreglo, arregloCalor)
             if arreglo[medioArregloX][medioArregloY]==1:
                 evolucion="1"
@@ -248,8 +268,9 @@ def atractorDos(arreglo):
         os.system("cls")
         print(f'Cargando: {cargando}%...')
         arreglo=crearArreglo(cols, rows)
+    print(list(nx.connected_components(G)))
     plt.subplot(111)
-    nx.draw_spring(G, arrows=True, with_labels=1, node_color='r')
+    nx.draw_planar(G, arrows=True, with_labels=1, node_color='r')
     plt.show()
     arreglo=crearArreglo(cols, rows)
 
@@ -287,7 +308,7 @@ def atractorTres(arreglo):
         G.add_node(toDecimal(binario))
         arregloCalor=crearArreglo(cols, rows)
         arregloEvoluciones=[toDecimal(binario)]
-        for z in range(1, 251):
+        for z in range(1, 51):
             arreglo=reglas(arreglo, arregloCalor)
             if arreglo[medioArregloX][medioArregloY]==1:
                 evolucion="1"
@@ -331,8 +352,9 @@ def atractorTres(arreglo):
         os.system("cls")
         print(f'Cargando: {cargando}%...')
         arreglo=crearArreglo(cols, rows)
-    plt.subplot(111)
-    nx.draw_spring(G, arrows=True, with_labels=1, node_size=200, node_color='r')
+    #plt.subplot(111)
+    #nx.draw_kamada_kawai(G, arrows=True, with_labels=1, node_size=80, node_color='r', font_size=8, arrowsize=5)
+    nx.draw(G, pos=nx.planar_layout(G, center=[0,0]), arrows=True, with_labels=1, node_size=80, node_color='r', font_size=8)
     plt.show()
     arreglo=crearArreglo(cols, rows)
 
@@ -424,10 +446,15 @@ width=int(input("Teclea el ancho de la ventana en pixeles: "))
 height=int(input("Teclea el alto de la ventana en pixeles: "))
 resolution=int(input("Teclea la dimensión de la célula viva, en pixeles: "))
 toroide="X"
+juego="0"
 
 while toroide!="T" and toroide!="M":
     toroide=input("Quieres que las orillas sean tratadas como [T]oroide o [M]uertas: ")
     toroide=toroide.upper()
+
+while juego!="1" and juego!="2" and juego!="3":
+    juego=input("Selecciona la regla con la que deseas jugar: \n[1] B3/S23\n[2] B2/S3\n[3] B2/S7\nElección: ")
+
 
 
 pygame.init()
