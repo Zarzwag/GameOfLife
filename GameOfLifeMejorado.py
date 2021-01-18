@@ -212,7 +212,7 @@ def atractorDos(arreglo):
             arreglo[medioArregloX+1][medioArregloY+1]=1
         G.add_node(toDecimal(binario))
         arregloEvoluciones=[toDecimal(binario)]
-        for z in range(1, 51):
+        for z in range(1, 13):
             arreglo=reglas(arreglo)
             if arreglo[medioArregloX][medioArregloY]==1:
                 evolucion="1"
@@ -275,7 +275,7 @@ def atractorTres(arreglo):
         arregloEvoluciones=[]
         G.add_node(toDecimal(binario))
         arregloEvoluciones=[toDecimal(binario)]
-        for z in range(1, 51):
+        for z in range(1, 13):
             arreglo=reglas(arreglo)
             if arreglo[medioArregloX][medioArregloY]==1:
                 evolucion="1"
@@ -325,6 +325,130 @@ def atractorTres(arreglo):
     plt.show()
     arreglo=crearArreglo(cols, rows)
 
+def atractorCuatro(arreglo):
+    medioArregloX=int(len(arreglo)/2)-2
+    medioArregloY=int(len(arreglo[medioArregloX])/2)-2
+    cargando=0
+    G=nx.DiGraph()
+    for x in range(0, 65536):
+        binario=toBinario(x)
+        if len(binario)<16:
+            binario="000000000000000"+binario
+            binario=binario[-16:]
+        if binario[0]=="1":
+            arreglo[medioArregloX][medioArregloY]=1
+        if binario[1]=="1":
+            arreglo[medioArregloX+1][medioArregloY]=1
+        if binario[2]=="1":
+            arreglo[medioArregloX+2][medioArregloY]=1
+        if binario[3]=="1":
+            arreglo[medioArregloX+3][medioArregloY+1]=1
+        if binario[4]=="1":
+            arreglo[medioArregloX][medioArregloY+1]=1
+        if binario[5]=="1":
+            arreglo[medioArregloX+1][medioArregloY+1]=1
+        if binario[6]=="1":
+            arreglo[medioArregloX+2][medioArregloY+1]=1
+        if binario[7]=="1":
+            arreglo[medioArregloX+3][medioArregloY+1]=1
+        if binario[8]=="1":
+            arreglo[medioArregloX][medioArregloY+2]=1
+        if binario[9]=="1":
+            arreglo[medioArregloX+1][medioArregloY+2]=1
+        if binario[10]=="1":
+            arreglo[medioArregloX+2][medioArregloY+2]=1
+        if binario[11]=="1":
+            arreglo[medioArregloX+3][medioArregloY+2]=1
+        if binario[12]=="1":
+            arreglo[medioArregloX][medioArregloY+3]=1
+        if binario[13]=="1":
+            arreglo[medioArregloX+1][medioArregloY+3]=1
+        if binario[14]=="1":
+            arreglo[medioArregloX+2][medioArregloY+3]=1
+        if binario[15]=="1":
+            arreglo[medioArregloX+3][medioArregloY+3]=1
+
+        arregloEvoluciones=[]
+        G.add_node(toDecimal(binario))
+        arregloEvoluciones=[toDecimal(binario)]
+        for z in range(1, 13):
+            arreglo=reglas(arreglo)
+            if arreglo[medioArregloX][medioArregloY]==1:
+                evolucion="1"
+            else:
+                evolucion="0"
+            if arreglo[medioArregloX+1][medioArregloY]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX+2][medioArregloY]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX+3][medioArregloY]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX][medioArregloY+1]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX+1][medioArregloY+1]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX+2][medioArregloY+1]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX+3][medioArregloY+1]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX][medioArregloY+2]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX+1][medioArregloY+2]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX+2][medioArregloY+2]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX+3][medioArregloY+2]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX][medioArregloY+3]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX+1][medioArregloY+3]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX+2][medioArregloY+3]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            if arreglo[medioArregloX+3][medioArregloY+3]==1:
+                evolucion+="1"
+            else:
+                evolucion+="0"
+            arregloEvoluciones.append(toDecimal(evolucion))
+            G.add_edge(arregloEvoluciones[-2], arregloEvoluciones[-1])
+        cargando+=0.00152587890625
+        os.system("cls")
+        print(f'Cargando: {cargando}%...')
+        arreglo=crearArreglo(cols, rows)
+    #plt.subplot(111)
+    #nx.draw_kamada_kawai(G, arrows=True, with_labels=1, node_size=80, node_color='r', font_size=8, arrowsize=5)
+    nx.draw(G, pos=nx.spring_layout(G, center=[0,0]), arrows=True, with_labels=1, node_size=80, node_color='r', font_size=8)
+    plt.show()
+    arreglo=crearArreglo(cols, rows)
+
 def paused(arreglo, arregloGeneracion, arregloVivos):
     pygame.display.set_caption('Game of Life: PAUSADO. P=Jugar, Click=Modificar Celulas, S=Guardar, L=Cargar')
     pause=True
@@ -353,6 +477,9 @@ def paused(arreglo, arregloGeneracion, arregloVivos):
                 elif event.key == pygame.K_3:
                     arreglo=crearArreglo(cols, rows)
                     atractorTres(arreglo)
+                elif event.key == pygame.K_4:
+                    arreglo=crearArreglo(cols, rows)
+                    atractorCuatro(arreglo)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 if arreglo[int(pos[0]/resolution)][int(pos[1]/resolution)]==0:
