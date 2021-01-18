@@ -1,21 +1,14 @@
 # GameOfLife
-Juego de la Vida de Conway. Con multiples tamaños de arreglo, generación de gráfica y mapa de calor.
+Juego de la Vida de Conway. Con multiples tamaños de arreglo, generación de gráfica y calculo de atractores en arreglos 2x2 hasta 4x4.
 
 
 # Inicio
-El juego esta programado en Python 3, utilizando la librerıa Pygame como
-motor grafico. Para iniciar el programa escribimos ”python3 GameOfUltimate.py" en
-la consola, mientras nos encontramos en la carpeta que contiene dicho pro-
-grama. Presionamos Enter y comienza el programa.
+El juego está programado en Python 3, utilizando la librería Pygame como motor gráfico, NetworkX para manejar los Diagramas de Ciclos y MatPlotLib para imprimir en pantalla éstos. Hay que estar seguros de tener instaladas estas Librerías en la computadora.
+Para iniciar el programa escribimos 'python3 GameOfUltimate.py' en la consola, mientras nos encontramos en la carpeta que contiene dicho programa. Presionamos Enter y comienza el programa.
 
-Al iniciar la consola nos preguntara el color en RGB de las celulas vivas
-y muertas, con el fin de que el usuario pueda decidirse por el color que mas
-le convenga o guste. Despues de esto la consola preguntara el tamaño de la
-pantalla en pixeles. Una vez tecleado este dato, solo falta decidir el tamaño
-de la celula en pixeles. Cabe destacar que si elegimos por ejemplo, un tamano
-de ventana de 800x600 pixeles, y un tama ̃no de celula de 20 pixeles, entonces
-el programa automaticamente generara el arreglo bidimensional de tama ̃no
-40x20 celulas.
+Al iniciar la consola nos preguntará el color en RGB de las celulas vivas y muertas, con el fin de que el usuario pueda decidirse por el color que más le convenga o guste. Después de esto la consola preguntará el tamaño de la pantalla en pixeles. Una vez tecleado este dato, solo falta decidir el tamaño de la célula en pixeles. Cabe destacar que si elegimos por ejemplo, un tamaño de ventana de 800x600 pixeles, y un tamaño de célula de 20 pixeles, entonces el programa automáticamente generará el arreglo bidimensional de tamaño 40x20 células.
+Después de esto, el programa nos preguntará cómo queremos tratar las orillas del arreglo: Como un toroide o como células muertas.
+Por último hay que elegir con cuál de las tres reglas programadas queremos jugar.
 # Estado de Pausa
 
 Una vez iniciado el Juego, todas las celulas estaran en estado ”Muer-
@@ -37,23 +30,25 @@ la misma carpeta que el archivo del Juego. Hasta el momento, solo
 podemos cargar archivos que se hayan creado con el mismo tamaño
 de Pantalla y Celula, pues de otra manera se genera un error.
 
--Una vez querramos que el juego inicie, presionamos la tecla ”P”(de
-”Pausa”) para que el juego comience a evolucionar.
+-Si queremos reiniciar por completo el juego (Matar a todas las células, reinciar contadores de Generación y Células Vivas), presionamos la tecla 'C' (de Clear)
 
--También podemos presionar la tecla "G" (de Gráfica), para generar en una ventana aparte,
-la gráfica de densidad poblacional a través de las generaciones.
+-Al presionar la tecla 'G' (de Graph), generamos una gráfica que muestra la densidad poblacional del juego, con respecto al tiempo. Si queremos regresar al juego, hay que cerrar la ventana de la gráfica.
 
--En este estado podemos tambien presionar la tecla "H"(de Heat) para activar y desactivar
-la vista de "calor". Que nos muestra qué células han estado vivas más tiempo.
+-Si presionamos la tecla '2', el programa comienza a calcular los diagramas de ciclos para un arreglo 2x2. (Se recomienda hacerlo en un arreglo de 4x4 células, y jugando con las orillas 'Muertas', con la finalidad de que haya una capa exterior de células muertas). El progreso de este cálculo se va mostrando en la consola. Una vez terminado, automáticamente se abre una ventana con los diagramas de ciclos. Así pues, es fácil detectar los Atractores.
 
--Por último, podemos presionar la tecla "C"(de Clear) para reiniciar el tablero, conteo de generación, gráfica poblacional y mapa de calor.
+-Si presionamos la tecla '3', el programa comienza a calcular los diagramas de ciclos para un arreglo 3x3. (Se recomienda hacerlo en un arreglo de 5x5 células, y jugando con las orillas 'Muertas', con la finalidad de que haya una capa exterior de células muertas). El progreso de este cálculo se va mostrando en la consola. Una vez terminado, automáticamente se abre una ventana con los diagramas de ciclos. Así pues, es fácil detectar los Atractores.
+
+-Si presionamos la tecla '4', el programa comienza a calcular los diagramas de ciclos para un arreglo 4x4. (Se recomienda hacerlo en un arreglo de 6x6 células, y jugando con las orillas 'Muertas', con la finalidad de que haya una capa exterior de células muertas). El progreso de este cálculo se va mostrando en la consola. Una vez terminado, automáticamente se abre una ventana con los diagramas de ciclos. Así pues, es fácil detectar los Atractores.
+
+-Una vez querramos que el juego inicie, presionamos la tecla 'P' (de 'Play') para que el juego comience a evolucionar.
 
 # Estado de Evolucion
 Una vez iniciado el juego,  ́este comenzara la evolucion de las celulas de
 forma interminable. Al mismo tiempo, en la consola se imprime
 la cantidad de celulas vivas y la generacion en la que nos encontramos desde
 que quitamos la pausa.
-Si queremos generar algun cambio en el juego, o pausarlo en cualquier
+
+-Si queremos generar algun cambio en el juego, o pausarlo en cualquier
 momento, presionamos la tecla ”P”para que el juego se detenga inme-
 diatamente y regresemos al estado de Pausa.
 
